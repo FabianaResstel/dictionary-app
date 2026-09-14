@@ -1,20 +1,32 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import WordPicture from "./wordPicture";
 
 import "./App.css";
 
+const apiKey = `0d9d6fa642662e53t328bfec1ado0b77`;
+
 function App() {
-  const [word, setWord] = useState("book");
+  const [word, setWord] = useState("earth");
   const [result, setResult] = useState(null);
+  const [photos, setPhotos] = useState([]);
 
   function displayMeaning(response) {
     setResult(response.data);
   }
 
+  function displayPhotos(response) {
+    setPhotos(response.data.photos);
+  }
+
   function getMeaning(term) {
-    let apiKey = `0d9d6fa642662e53t328bfec1ado0b77`;
     let apiURL = `https://api.shecodes.io/dictionary/v1/define?word=${term}&key=${apiKey}`;
     axios.get(apiURL).then(displayMeaning);
+  }
+
+  function getPhotos(term) {
+    let apiURL = `https://api.shecodes.io/images/v1/search?query=${term}&key=${apiKey}`;
+    axios.get(apiURL).then(displayPhotos);
   }
 
   function newWord(event) {
@@ -24,16 +36,18 @@ function App() {
   function wordMeaning(event) {
     event.preventDefault();
     getMeaning(word);
+    getPhotos(word);
   }
 
   useEffect(() => {
     getMeaning(word);
+    getPhotos(word);
   }, []);
 
   return (
     <div className="container">
       <h1>Welcome to the Dictionary App</h1>
-      <h2>What word are you curious about?</h2>
+      <h2>Got a word on your mind?</h2>
 
       <form onSubmit={wordMeaning}>
         <input onChange={newWord} type="text" placeholder="Enter a word..." />
@@ -58,6 +72,9 @@ function App() {
           )}
         </div>
       )}
+
+      <WordPicture photos={photos} />
+
       <footer>
         <p>
           Coded by{" "}
@@ -73,5 +90,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
