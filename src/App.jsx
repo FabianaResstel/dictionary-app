@@ -7,7 +7,7 @@ import "./App.css";
 const apiKey = `0d9d6fa642662e53t328bfec1ado0b77`;
 
 function App() {
-  const [word, setWord] = useState("earth");
+  const [word, setWord] = useState("book");
   const [result, setResult] = useState(null);
   const [photos, setPhotos] = useState([]);
 
